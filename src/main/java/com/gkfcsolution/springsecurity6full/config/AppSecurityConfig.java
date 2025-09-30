@@ -46,7 +46,7 @@ public class AppSecurityConfig {
                 .roles("USER","EMPLOYEE")
                 .build();
 
-        return new InMemoryUserDetailsManager(admin, user);
+        return new InMemoryUserDetailsManager(admin, user, employee);
     }
 
     @Bean
