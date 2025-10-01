@@ -1,0 +1,5 @@
+[
+  "/api/v1/employees/fetchAll",
+  "/api/v1/employees/fetch/*",
+  "/api/v1/employees/save"
+]

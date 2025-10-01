@@ -1,5 +1,7 @@
 package com.gkfcsolution.springsecurity6full.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.asm.TypeReference;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -13,6 +15,11 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created on 2025 at 17:08
@@ -51,16 +58,51 @@ public class AppSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+/*
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v1/employees/fetchAll").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/employees/fetch/*").hasAnyRole("EMPLOYEE","ADMIN")
+                        .requestMatchers("/api/v1/employees/*").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .httpBasic(Customizer.withDefaults());
+        return http.build();*/
+        /*http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v1/employees/fetchAll","/api/v1/employees/fetch/*").authenticated()
+                        .anyRequest().authenticated()
+                )
+                .httpBasic(Customizer.withDefaults());
+
+        return http.build();*/
 
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/employees/fetchAll").permitAll()
+                        .requestMatchers(getSecureServicesList()).authenticated()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
 
+    }
+
+    private String[] getSecureServicesList(){
+        InputStream fileStream = TypeReference.class.getResourceAsStream("/static/secureservices.json");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<String> urlList = new ArrayList<>();
+        try {
+            urlList = objectMapper.readValue(fileStream, ArrayList.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        String[] urls =  urlList.stream().toArray(String[]::new);
+        return urls;
     }
 }

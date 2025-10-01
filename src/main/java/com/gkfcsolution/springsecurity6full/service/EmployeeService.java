@@ -24,4 +24,8 @@ public class EmployeeService {
 
         return employeeList;
     }
+
+    public Employee getEmployee(int id) {
+        return new Employee(1, "GUEKENG");
+    }
 }

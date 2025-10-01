@@ -4,6 +4,7 @@ import com.gkfcsolution.springsecurity6full.entity.Employee;
 import com.gkfcsolution.springsecurity6full.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,8 +26,23 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
+    @GetMapping(value = "/wish")
+    public String sayHello(){
+        return "Welcome to spring security application";
+    }
+
     @GetMapping(value = "/fetchAll")
     public List<Employee> fetchAllEmployee(){
       return   employeeService.fetchAllEmployee();
     }
+
+    @GetMapping(value = "/fetch/{id}")
+    public Employee getEmployee(@PathVariable int id) {
+        return employeeService.getEmployee(id);
+    }
+    @GetMapping(value = "/save")
+    public String saveEmployee(){
+        return "Save Completed";
+    }
+
 }
