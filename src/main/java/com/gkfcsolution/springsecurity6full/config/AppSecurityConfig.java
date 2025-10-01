@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.asm.TypeReference;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -38,48 +40,29 @@ public class AppSecurityConfig {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails admin = User.withUsername("admin")
-                .password(passwordEncoder().encode("123456"))
-                .roles("ADMIN","EMPLOYEE")
-                .build();
-        UserDetails user = User.withUsername("user")
-                .password(passwordEncoder().encode("123456"))
-                .roles("USER","EMPLOYEE")
-                .build();
-        UserDetails employee = User.withUsername("employee")
-                .password(passwordEncoder().encode("123456"))
-                .roles("USER","EMPLOYEE")
-                .build();
 
-        return new InMemoryUserDetailsManager(admin, user, employee);
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-/*
+
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf-> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/employees/fetchAll").hasRole("ADMIN")
-                        .requestMatchers("/api/v1/employees/fetch/*").hasAnyRole("EMPLOYEE","ADMIN")
-                        .requestMatchers("/api/v1/employees/*").permitAll()
+                        .requestMatchers("/api/v1/employees/fetch/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/v1/employees/**").permitAll()
                         .anyRequest().authenticated()
-                )
-                .httpBasic(Customizer.withDefaults());
-        return http.build();*/
-        /*http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/employees/fetchAll","/api/v1/employees/fetch/*").authenticated()
-                        .anyRequest().authenticated()
+
                 )
                 .httpBasic(Customizer.withDefaults());
 
-        return http.build();*/
+        return http.build();
 
-        http
+     /*   http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(getSecureServicesList()).authenticated()
@@ -87,7 +70,7 @@ public class AppSecurityConfig {
                 )
                 .httpBasic(Customizer.withDefaults());
 
-        return http.build();
+        return http.build();*/
 
     }
 

@@ -36,6 +36,7 @@ public class DataInitializer {
                 // 1. Sauvegarde des rôles
                 Role roleUser = roleRepository.save(Role.builder().role_name("ROLE_USER").build());
                 Role roleAdmin = roleRepository.save(Role.builder().role_name("ROLE_ADMIN").build());
+                Role roleEmployee = roleRepository.save(Role.builder().role_name("ROLE_EMPLOYEE").build());
 
                 // 2. Créer les utilisateurs avec des rôles déjà managés
                 User admin = User.builder()
@@ -52,8 +53,15 @@ public class DataInitializer {
                         .roles(List.of(roleUser))
                         .build();
 
+                User employee = User.builder()
+                        .userName("employee")
+                        .password(passwordEncoder.encode("123456"))
+                        .active(true)
+                        .roles(List.of(roleUser, roleEmployee))
+                        .build();
+
                 // 3. Sauvegarder les utilisateurs
-                userRepository.saveAll(Arrays.asList(admin, user));
+                userRepository.saveAll(Arrays.asList(admin, user, employee));
 
                 System.out.println("✅ Database initialized with users and roles");
             }
