@@ -1,6 +1,7 @@
 package com.gkfcsolution.springsecurity6full.service;
 
 import com.gkfcsolution.springsecurity6full.entity.User;
+import com.gkfcsolution.springsecurity6full.entity.dto.UserInformation;
 import com.gkfcsolution.springsecurity6full.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,8 @@ public class UserService {
     private UserRepository userRepository;
 
 
-    public User fetchUser(String userName){
-        return userRepository.findByUserName(userName);
+    public UserInformation fetchUser(String userName){
+        User user =  userRepository.findByUserName(userName);
+        return UserInformation.fromUser(user);
     }
 }

@@ -1,6 +1,7 @@
 package com.gkfcsolution.springsecurity6full.controller;
 
 import com.gkfcsolution.springsecurity6full.entity.User;
+import com.gkfcsolution.springsecurity6full.entity.dto.UserInformation;
 import com.gkfcsolution.springsecurity6full.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,7 @@ public class UserController {
     @Autowired
     private UserService userService;
     @GetMapping
-    public User findUserDetails(@RequestParam String userName){
+    public UserInformation findUserDetails(@RequestParam String userName){
         return userService.fetchUser(userName);
     }
 }
