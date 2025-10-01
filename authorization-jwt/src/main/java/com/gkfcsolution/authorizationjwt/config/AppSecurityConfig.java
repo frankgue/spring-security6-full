@@ -13,8 +13,13 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -39,6 +44,23 @@ public class AppSecurityConfig {
 
     private final JwtUtils jwtUtils;
     private final AuthorizationFilter authorizationFilter;
+
+ /*   @Bean
+    public InMemoryUserDetailsManager configureAuthentication(){
+        List<UserDetails> userDetails = new ArrayList<>();
+        List<GrantedAuthority> employeeRoles = new ArrayList<>();
+        List<GrantedAuthority> adminRoles = new ArrayList<>();
+        List<GrantedAuthority> userRoles = new ArrayList<>();
+        employeeRoles.add(new SimpleGrantedAuthority("EMPLOYEE"));
+        adminRoles.add(new SimpleGrantedAuthority("ADMIN"));
+        userRoles.add(new SimpleGrantedAuthority("USER"));
+
+        userDetails.add(new User("employee", passwordEncoder().encode("123456"), employeeRoles));
+        userDetails.add(new User("admin", passwordEncoder().encode("123456"), adminRoles));
+        userDetails.add(new User("user", passwordEncoder().encode("123456"), userRoles));
+
+        return new InMemoryUserDetailsManager();
+    }*/
 
     /*  private final UserDetailsService userDetailsService;
 
